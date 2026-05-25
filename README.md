@@ -1,6 +1,6 @@
 # RepoPilot AI
 
-RepoPilot AI is a full-stack AI tool that analyzes public GitHub repositories and generates project summaries, tech stack insights, interview questions, and setup instructions.
+RepoPilot AI analyzes public GitHub repositories using AI and returns project summaries, tech stack insights, interview questions, and setup instructions in one workflow.
 
 ## Features
 
@@ -22,12 +22,12 @@ RepoPilot AI is a full-stack AI tool that analyzes public GitHub repositories an
 
 ```text
 .
-├── app/                  # FastAPI app, routes, services, graph workflow
-├── uploaded-ui/          # React/TanStack frontend
-├── main.py               # FastAPI entrypoint
-├── run_server.py         # Backend runner
-├── requirements.txt      # Python dependencies
-└── .env.example          # Environment variable template
+|-- app/                  # FastAPI app, routes, services, graph workflow
+|-- uploaded-ui/          # React/TanStack frontend
+|-- main.py               # FastAPI entrypoint
+|-- run_server.py         # Backend runner
+|-- requirements.txt      # Python dependencies
+`-- .env.example          # Environment variable template
 ```
 
 ## Setup
