@@ -1,0 +1,22 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+
+# Frontend dependencies and build output
+uploaded-ui/node_modules/
+uploaded-ui/dist/
+uploaded-ui/dist-ssr/
+uploaded-ui/.output/
+uploaded-ui/.vinxi/
+uploaded-ui/.tanstack/
+uploaded-ui/.wrangler/
+uploaded-ui/.workspace/
+uploaded-ui/.git
+uploaded-ui/tsconfig.tsbuildinfo
+
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
