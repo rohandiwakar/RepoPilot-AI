@@ -7,6 +7,10 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
+type RuntimeEnv = {
+  API_BASE_URL?: string;
+};
+
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -29,9 +33,14 @@ function isApiRequest(request: Request): boolean {
   return new URL(request.url).pathname.startsWith("/api/");
 }
 
-async function proxyApiRequest(request: Request): Promise<Response> {
+function getApiBaseUrl(env: unknown): string {
+  const apiBaseUrl = (env as RuntimeEnv | undefined)?.API_BASE_URL;
+  return (apiBaseUrl || "http://127.0.0.1:8000").replace(/\/$/, "");
+}
+
+async function proxyApiRequest(request: Request, env: unknown): Promise<Response> {
   const incomingUrl = new URL(request.url);
-  const targetUrl = new URL(incomingUrl.pathname + incomingUrl.search, "http://127.0.0.1:8000");
+  const targetUrl = new URL(incomingUrl.pathname + incomingUrl.search, getApiBaseUrl(env));
   const headers = new Headers(request.headers);
   const init: RequestInit = {
     method: request.method,
@@ -93,7 +102,7 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       if (isApiRequest(request)) {
-        return await proxyApiRequest(request);
+        return await proxyApiRequest(request, env);
       }
 
       const handler = await getServerEntry();

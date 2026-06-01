@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: repopilot-ai-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DEBUG
+        value: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
+      - key: LLM_MAX_RETRIES
+        value: 2
+      - key: LLM_RETRY_BASE_SECONDS
+        value: 2
+      - key: LLM_RETRY_MAX_SECONDS
+        value: 30
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false

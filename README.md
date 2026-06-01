@@ -94,3 +94,72 @@ http://127.0.0.1:5178
 - Do not commit `.env`; it contains private API keys.
 - If Gemini generation fails with a quota error, switch to a model with available quota, wait for quota reset, or enable billing.
 - For faster responses, use fewer questions and keep `GEMINI_MODEL=gemini-2.5-flash-lite`.
+
+## Deployment
+
+### Backend on Render
+
+1. Push this repository to GitHub.
+2. In Render, create a new Blueprint from the repository. Render will read `render.yaml`.
+3. Add these secret environment variables in Render:
+
+```env
+GEMINI_API_KEY=your_real_gemini_api_key
+GITHUB_TOKEN=your_github_token_optional
+```
+
+4. Deploy and copy the backend URL, for example:
+
+```text
+https://repopilot-ai-api.onrender.com
+```
+
+Health check:
+
+```text
+https://repopilot-ai-api.onrender.com/api/v1/health
+```
+
+### Frontend on Cloudflare Workers
+
+From `uploaded-ui/`, set the backend URL and deploy:
+
+```powershell
+cd uploaded-ui
+npm install
+npx wrangler secret put API_BASE_URL
+npm run build
+npx wrangler deploy
+```
+
+When Wrangler asks for `API_BASE_URL`, paste your Render backend URL.
+
+### Frontend Environment
+
+For Cloudflare Workers, use `API_BASE_URL` as a Wrangler secret. The worker proxies `/api/*` requests to your Render backend.
+
+For local builds, `uploaded-ui/.env.example` shows both frontend variables:
+
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000
+API_BASE_URL=http://127.0.0.1:8000
+```
+
+This project already has a Cloudflare/TanStack Start build setup, so Cloudflare Workers is the recommended frontend host.
+
+### Local Production Check
+
+Backend:
+
+```powershell
+python run_server.py
+```
+
+Frontend:
+
+```powershell
+cd uploaded-ui
+copy .env.example .env
+npm run build
+npm run preview
+```
