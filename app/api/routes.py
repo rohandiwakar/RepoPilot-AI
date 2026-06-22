@@ -28,7 +28,7 @@ async def analyze_repo(request: AnalyzeRequest):
         }
 
         result = await graph.ainvoke(initial_state)
-        final_response = result.get("final_response", {})
+        final_response = result.get("final_response") or {}
 
         return final_response
     except Exception as e:

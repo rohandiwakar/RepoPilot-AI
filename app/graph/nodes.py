@@ -7,7 +7,7 @@ async def fetch_repo_data(state: RepoAnalysisState) -> dict:
     """Node 1: Fetch repository data from GitHub API."""
     print("Node 1: Fetching repository data from GitHub...")
 
-    github_url = state.get("github_url", "")
+    github_url = state.get("github_url") or ""
     try:
         github_client = GitHubClient()
         repo_data = await github_client.get_full_repo_data(github_url)
@@ -26,7 +26,7 @@ async def analyze_project(state: RepoAnalysisState) -> dict:
     """Node 2: Analyze the project using Gemini LLM."""
     print("Node 2: Analyzing project with AI...")
 
-    repo_data = state.get("repo_data", {})
+    repo_data = state.get("repo_data") or {}
     if not repo_data:
         error_msg = "No repo data available for analysis"
         print(f"Error: {error_msg}")
@@ -60,8 +60,8 @@ async def generate_questions(state: RepoAnalysisState) -> dict:
     print("Node 3: Generating interview questions...")
 
     try:
-        project_analysis = state.get("project_analysis", {})
-        repo_data = state.get("repo_data", {})
+        project_analysis = state.get("project_analysis") or {}
+        repo_data = state.get("repo_data") or {}
         difficulty = state.get("difficulty", "intermediate")
         num_questions = state.get("num_questions", 10)
 
@@ -87,8 +87,8 @@ async def generate_setup(state: RepoAnalysisState) -> dict:
     print("Node 4: Generating setup instructions...")
 
     try:
-        project_analysis = state.get("project_analysis", {})
-        repo_data = state.get("repo_data", {})
+        project_analysis = state.get("project_analysis") or {}
+        repo_data = state.get("repo_data") or {}
 
         llm_service = LLMService()
         setup = await llm_service.generate_setup_instructions(
@@ -113,10 +113,10 @@ async def compile_response(state: RepoAnalysisState) -> dict:
     """Node 5: Compile the final response."""
     print("Node 5: Compiling final response...")
 
-    project_analysis = state.get("project_analysis", {})
-    questions = state.get("interview_questions", [])
-    setup = state.get("setup_instructions", {})
-    errors = state.get("errors", [])
+    project_analysis = state.get("project_analysis") or {}
+    questions = state.get("interview_questions") or []
+    setup = state.get("setup_instructions") or {}
+    errors = state.get("errors") or []
 
     final_response = {
         "project_analysis": {
